@@ -3,10 +3,9 @@
 </p>
 
 # Projeto Lobo-Guará - Business Intelligence
+### Sistema de monitoramento de queimadas feito por alunos da Universidade de Brasília.
 
 Este repositório é o responsável pelo microsserviço relacionado a Business Intelligence
-
-### Aplicativo de monitoramento de queimadas feito por alunos da Universidade de Brasília.
 
 ## Requisitos
 Para executar o sistema é necessário possuir o **docker** e o **docker-compose** instalados em seu ambiente. Você pode verificar como instalar estas ferramentas nos links a seguir:
