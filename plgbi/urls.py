@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from modules.views import NewModule
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('new-module/', NewModule.as_view()),
 ]
