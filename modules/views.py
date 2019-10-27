@@ -10,6 +10,9 @@ import io
 
 class NewModule(APIView):
 
+    '''
+    Cria um novo modulo
+    '''
     def post(self, request):
         try:
             module = request.data["module"]
@@ -21,8 +24,12 @@ class NewModule(APIView):
             return Response({'response': 'module_unseccessfully_created'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
 
+
 class NewModuleData(APIView):
 
+    '''
+    Cria um conjunto de dados de um determinado módulo
+    '''
     def post(self, request):
         try:
             module = request.data["module"]
@@ -48,8 +55,12 @@ class NewModuleData(APIView):
             return Response({'response': 'module-data_unseccessfully_created'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
 
+
 class GetAllModuleData(APIView):
 
+    '''
+    Retorna todos os conjuntos de dados de um determinado módulo
+    '''
     def post(self, request):
         try:
             module = request.data["module"]
