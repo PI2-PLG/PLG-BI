@@ -108,7 +108,6 @@ class GetAllModuleList(APIView):
                                                      'longitude':module.module_data.last().longitude
                                                      }
                 index += 1
-            print(module_list)
             return Response(module_list, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
