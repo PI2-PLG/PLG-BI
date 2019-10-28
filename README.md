@@ -34,3 +34,15 @@ $ docker-compose -f docker-compose.yml up
 Com o processo tendo funcionado perfeitamente, será possível acessar a interface da API em:
 
 * https:\\\\localhost:8000
+
+## Populando o Banco de Dados
+
+Com o sistema funcionando execute a seguinte linha:  
+
+```
+
+sudo docker-compose exec -T web python manage.py shell < ./scripts/module-seed.py
+
+```
+
+Caso tudo ocorra normalmente o banco será populado com Modulos e seus dados.

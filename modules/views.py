@@ -61,7 +61,7 @@ class GetAllModuleData(APIView):
     '''
     Retorna todos os conjuntos de dados de um determinado módulo
     '''
-    def post(self, request):
+    def get(self, request):
         try:
             module = request.data["module"]
             module_name = module["name"]
