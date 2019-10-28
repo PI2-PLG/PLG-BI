@@ -89,3 +89,26 @@ class GetAllModuleData(APIView):
         except:
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
+
+class GetAllModuleList(APIView):
+
+    '''
+    Retorna uma lista com todos os módulos cadastrados
+    '''
+    def get(self, request):
+        try:
+            modules = Module.objects.all()
+            module_list = {}
+            index = 0
+            for module in modules:
+                module_list['module-'+str(index)] = {
+                                                     'name':module.name,
+                                                     'latitude':module.module_data.last().latitude,
+                                                     'longitude':module.module_data.last().longitude
+                                                     }
+                index += 1
+            print(module_list)
+            return Response(module_list, status=status.HTTP_200_OK)
+        except:
+            return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
