@@ -90,6 +90,7 @@ class GetAllModuleData(APIView):
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
 
+
 class GetAllModuleList(APIView):
 
     '''
@@ -109,6 +110,37 @@ class GetAllModuleList(APIView):
                 index += 1
             print(module_list)
             return Response(module_list, status=status.HTTP_200_OK)
+        except:
+            return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+
+
+class GetAllData(APIView):
+
+    '''
+    Retorna todos os módulos e seus dados
+    '''
+    def get(self, request):
+        try:
+            modules = Module.objects.all()
+            data_list = {}
+            for module in modules:
+                query_list = module.module_data.all()
+                data_index = 1
+                aux_dict_2 = {}
+                for query in query_list:
+                    aux_dict = {}
+                    aux_dict['date'] = query.date
+                    aux_dict['latitude'] = query.latitude
+                    aux_dict['longitude'] = query.longitude
+                    aux_dict['temperature'] = query.temperature
+                    aux_dict['humidity'] = query.humidity
+                    aux_dict['pressure'] = query.pressure
+                    aux_dict['ppm'] = query.ppm
+                    aux_dict_2['data-set-'+str(data_index)] = aux_dict
+                    data_index += 1
+                    data_list[module.name] = aux_dict_2
+            return Response(data_list, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
