@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from modules.views import NewModule, NewModuleData, GetAllModuleData
+from modules.views import NewModule, NewModuleData, GetAllModuleData, GetAllModuleList, GetAllData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('new-module/', NewModule.as_view()),
     path('new-module-data/', NewModuleData.as_view()),
     path('all-module-data/', GetAllModuleData.as_view()),
+    path('all-modules-list/', GetAllModuleList.as_view()),
+    path('all-data/', GetAllData.as_view()),
 ]
