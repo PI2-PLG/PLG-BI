@@ -96,7 +96,7 @@ class GetAllModuleData(APIView):
                                     'ppm':ppms
                                     }}
 
-            return Response(all_data, status=status.HTTP_201_CREATED)
+            return Response(all_data, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
@@ -136,20 +136,31 @@ class GetAllData(APIView):
             data_list = {}
             for module in modules:
                 query_list = module.module_data.all()
-                data_index = 1
-                aux_dict_2 = {}
+                data_set = {}
+                dates = []
+                latitudes = []
+                longitudes = []
+                temperatures = []
+                humidities = []
+                pressures = []
+                ppms = []
                 for query in query_list:
-                    aux_dict = {}
-                    aux_dict['date'] = query.date
-                    aux_dict['latitude'] = query.latitude
-                    aux_dict['longitude'] = query.longitude
-                    aux_dict['temperature'] = query.temperature
-                    aux_dict['humidity'] = query.humidity
-                    aux_dict['pressure'] = query.pressure
-                    aux_dict['ppm'] = query.ppm
-                    aux_dict_2['data-set-'+str(data_index)] = aux_dict
-                    data_index += 1
-                    data_list[module.name] = aux_dict_2
+                    dates.append(query.date)
+                    latitudes.append(query.latitude)
+                    longitudes.append(query.longitude)
+                    temperatures.append(query.temperature)
+                    humidities.append(query.humidity)
+                    pressures.append(query.pressure)
+                    ppms.append(query.ppm)
+                data_list[module.name] = {
+                                          "date":dates,
+                                          "latitude":latitudes,
+                                          "longitude":longitudes,
+                                          "temperature":temperatures,
+                                          "humidity":humidities,
+                                          "pressure":pressures,
+                                          "ppm":ppms,
+                                         }
             return Response(data_list, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
