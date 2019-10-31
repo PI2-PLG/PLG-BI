@@ -69,21 +69,32 @@ class GetAllModuleData(APIView):
             module_data = module.module_data.all()
 
             all_data = {}
-            data_index = 0
+            dates = []
+            latitudes = []
+            longitudes = []
+            temperatures = []
+            humidities = []
+            pressures = []
+            ppms = []
             for data in module_data:
                 module_data = ModuleDataSerializer(data)
-                data_dict = {
-                            'date':module_data.data['date'],
-                            'latitude':module_data.data['latitude'],
-                            'longitude':module_data.data['longitude'],
-                            'temperature':module_data.data['temperature'],
-                            'humidity':module_data.data['humidity'],
-                            'pressure':module_data.data['pressure'],
-                            'ppm':module_data.data['ppm'],
-                            }
-                data_name = 'data-set-'+str(data_index)
-                all_data[data_name] = data_dict
-                data_index += 1
+                dates.append(module_data.data['date'])
+                latitudes.append(module_data.data['latitude'])
+                longitudes.append(module_data.data['longitude'])
+                temperatures.append(module_data.data['temperature'])
+                humidities.append(module_data.data['humidity'])
+                pressures.append(module_data.data['pressure'])
+                ppms.append(module_data.data['ppm'])
+
+            all_data = {module_name:{
+                                    'date':dates,
+                                    'latitude':latitudes,
+                                    'longitude':longitudes,
+                                    'temperature':temperatures,
+                                    'humidity':humidities,
+                                    'pressure':pressures,
+                                    'ppm':ppms
+                                    }}
 
             return Response(all_data, status=status.HTTP_201_CREATED)
         except:
