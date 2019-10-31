@@ -67,7 +67,6 @@ class GetAllModuleData(APIView):
             module_name = module["name"]
             module = Module.objects.get(name=module_name)
             module_data = module.module_data.all()
-
             all_data = {}
             dates = []
             latitudes = []
@@ -113,11 +112,19 @@ class GetAllModuleList(APIView):
             module_list = {}
             index = 0
             for module in modules:
-                module_list['module-'+str(index)] = {
-                                                     'name':module.name,
-                                                     'latitude':module.module_data.last().latitude,
-                                                     'longitude':module.module_data.last().longitude
-                                                     }
+                print(module.module_data)
+                if(module.module_data.last() != None and module.module_data.last() != None):
+                    module_list['module-'+str(index)] = {
+                                                         'name':module.name,
+                                                         'latitude':module.module_data.last().latitude,
+                                                         'longitude':module.module_data.last().longitude
+                                                         }
+                else:
+                    module_list['module-'+str(index)] = {
+                                                         'name':module.name,
+                                                         'latitude':0.00,
+                                                         'longitude':0.00
+                                                         }
                 index += 1
             return Response(module_list, status=status.HTTP_200_OK)
         except:
