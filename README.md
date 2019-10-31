@@ -46,3 +46,46 @@ sudo docker-compose exec -T web python manage.py shell < ./scripts/module-seed.p
 ```
 
 Caso tudo ocorra normalmente o banco será populado com Modulos e seus dados.
+
+## Exemplos de Requisições
+
+* Exemplo pra criar um módulo:
+
+```
+
+curl -d '{"module":{"name":"modulo2"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/new-module/
+
+```
+
+* Exemplo para criar um conjunto de dados de um módulo:
+
+```
+
+curl -d '{"module":{"name":"Modulo-FGA-D"},"module_data":{"latitude":"12.12","longitude":"12.12","temperature":"12.12","humidity":"12.12","pressure":"12.12","ppm":"123"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/new-module-data/
+
+```
+
+* Exemplo para a coleta da lista de módulos e suas respectivas posições:
+
+```
+
+curl -X GET http://localhost:8003/all-modules-list/
+
+```
+
+* Exemplo de requisição de todos os dados de um módulo:
+
+```
+
+curl -d '{"module":{"name":"Modulo-FGA-A"}}' -H "Content-Type: application/json" -X GET http://localhost:8003/all-module-data/
+
+```
+
+* Exemplo para a coleta de todos os módulos e seus conjuntos de dados:
+
+```
+
+curl -X GET http://localhost:8003/all-data/
+
+```
+

@@ -67,25 +67,35 @@ class GetAllModuleData(APIView):
             module_name = module["name"]
             module = Module.objects.get(name=module_name)
             module_data = module.module_data.all()
-
             all_data = {}
-            data_index = 0
+            dates = []
+            latitudes = []
+            longitudes = []
+            temperatures = []
+            humidities = []
+            pressures = []
+            ppms = []
             for data in module_data:
                 module_data = ModuleDataSerializer(data)
-                data_dict = {
-                            'date':module_data.data['date'],
-                            'latitude':module_data.data['latitude'],
-                            'longitude':module_data.data['longitude'],
-                            'temperature':module_data.data['temperature'],
-                            'humidity':module_data.data['humidity'],
-                            'pressure':module_data.data['pressure'],
-                            'ppm':module_data.data['ppm'],
-                            }
-                data_name = 'data-set-'+str(data_index)
-                all_data[data_name] = data_dict
-                data_index += 1
+                dates.append(module_data.data['date'])
+                latitudes.append(module_data.data['latitude'])
+                longitudes.append(module_data.data['longitude'])
+                temperatures.append(module_data.data['temperature'])
+                humidities.append(module_data.data['humidity'])
+                pressures.append(module_data.data['pressure'])
+                ppms.append(module_data.data['ppm'])
 
-            return Response(all_data, status=status.HTTP_201_CREATED)
+            all_data = {module_name:{
+                                    'date':dates,
+                                    'latitude':latitudes,
+                                    'longitude':longitudes,
+                                    'temperature':temperatures,
+                                    'humidity':humidities,
+                                    'pressure':pressures,
+                                    'ppm':ppms
+                                    }}
+
+            return Response(all_data, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
@@ -102,11 +112,19 @@ class GetAllModuleList(APIView):
             module_list = {}
             index = 0
             for module in modules:
-                module_list['module-'+str(index)] = {
-                                                     'name':module.name,
-                                                     'latitude':module.module_data.last().latitude,
-                                                     'longitude':module.module_data.last().longitude
-                                                     }
+                print(module.module_data)
+                if(module.module_data.last() != None and module.module_data.last() != None):
+                    module_list['module-'+str(index)] = {
+                                                         'name':module.name,
+                                                         'latitude':module.module_data.last().latitude,
+                                                         'longitude':module.module_data.last().longitude
+                                                         }
+                else:
+                    module_list['module-'+str(index)] = {
+                                                         'name':module.name,
+                                                         'latitude':0.00,
+                                                         'longitude':0.00
+                                                         }
                 index += 1
             return Response(module_list, status=status.HTTP_200_OK)
         except:
@@ -125,20 +143,31 @@ class GetAllData(APIView):
             data_list = {}
             for module in modules:
                 query_list = module.module_data.all()
-                data_index = 1
-                aux_dict_2 = {}
+                data_set = {}
+                dates = []
+                latitudes = []
+                longitudes = []
+                temperatures = []
+                humidities = []
+                pressures = []
+                ppms = []
                 for query in query_list:
-                    aux_dict = {}
-                    aux_dict['date'] = query.date
-                    aux_dict['latitude'] = query.latitude
-                    aux_dict['longitude'] = query.longitude
-                    aux_dict['temperature'] = query.temperature
-                    aux_dict['humidity'] = query.humidity
-                    aux_dict['pressure'] = query.pressure
-                    aux_dict['ppm'] = query.ppm
-                    aux_dict_2['data-set-'+str(data_index)] = aux_dict
-                    data_index += 1
-                    data_list[module.name] = aux_dict_2
+                    dates.append(query.date)
+                    latitudes.append(query.latitude)
+                    longitudes.append(query.longitude)
+                    temperatures.append(query.temperature)
+                    humidities.append(query.humidity)
+                    pressures.append(query.pressure)
+                    ppms.append(query.ppm)
+                data_list[module.name] = {
+                                          "date":dates,
+                                          "latitude":latitudes,
+                                          "longitude":longitudes,
+                                          "temperature":temperatures,
+                                          "humidity":humidities,
+                                          "pressure":pressures,
+                                          "ppm":ppms,
+                                         }
             return Response(data_list, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
