@@ -73,9 +73,10 @@ curl -X GET http://localhost:8003/all-modules-list/
 
 ```
 
-* Exemplo de requisição de todos os dados de um módulo
+* Exemplo de requisição de todos os dados de um módulo:
 
 ```
+
 curl -d '{"module":{"name":"Modulo-FGA-A"}}' -H "Content-Type: application/json" -X GET http://localhost:8003/all-module-data/
 
 ```
