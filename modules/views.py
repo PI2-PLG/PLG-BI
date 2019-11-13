@@ -46,7 +46,7 @@ class NewModuleData(APIView):
                     longitude = module_data["longitude"],
                     temperature = module_data["temperature"],
                     humidity = module_data["humidity"],
-                    pressure = module_data["pressure"],
+                    velocity = module_data["velocity"],
                     ppm = module_data["ppm"],
                     module=module)
             module.module_data.add(data)
@@ -73,7 +73,7 @@ class GetAllModuleData(APIView):
             longitudes = []
             temperatures = []
             humidities = []
-            pressures = []
+            velocity_group = []
             ppms = []
             for data in module_data:
                 module_data = ModuleDataSerializer(data)
@@ -82,7 +82,7 @@ class GetAllModuleData(APIView):
                 longitudes.append(module_data.data['longitude'])
                 temperatures.append(module_data.data['temperature'])
                 humidities.append(module_data.data['humidity'])
-                pressures.append(module_data.data['pressure'])
+                velocity_group.append(module_data.data['velocity'])
                 ppms.append(module_data.data['ppm'])
 
             all_data = {module_name:{
@@ -91,7 +91,7 @@ class GetAllModuleData(APIView):
                                     'longitude':longitudes,
                                     'temperature':temperatures,
                                     'humidity':humidities,
-                                    'pressure':pressures,
+                                    'velocity':velocity_group,
                                     'ppm':ppms
                                     }}
 
@@ -149,7 +149,7 @@ class GetAllData(APIView):
                 longitudes = []
                 temperatures = []
                 humidities = []
-                pressures = []
+                velocity_group = []
                 ppms = []
                 for query in query_list:
                     dates.append(query.date)
@@ -157,7 +157,7 @@ class GetAllData(APIView):
                     longitudes.append(query.longitude)
                     temperatures.append(query.temperature)
                     humidities.append(query.humidity)
-                    pressures.append(query.pressure)
+                    velocity_group.append(query.velocity)
                     ppms.append(query.ppm)
                 data_list[module.name] = {
                                           "date":dates,
@@ -165,7 +165,7 @@ class GetAllData(APIView):
                                           "longitude":longitudes,
                                           "temperature":temperatures,
                                           "humidity":humidities,
-                                          "pressure":pressures,
+                                          "pressure":velocity_group,
                                           "ppm":ppms,
                                          }
             return Response(data_list, status=status.HTTP_200_OK)

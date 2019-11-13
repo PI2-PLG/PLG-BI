@@ -21,7 +21,7 @@ class ModuleData(models.Model):
     longitude = models.DecimalField(max_digits=11, decimal_places=8, null=True)
     temperature = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     humidity = models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    pressure = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    velocity = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     ppm = models.IntegerField(null=True)
     module = models.ForeignKey("Module", on_delete=models.CASCADE, related_name='module_data')
 
