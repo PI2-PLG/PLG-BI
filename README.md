@@ -53,7 +53,7 @@ Caso tudo ocorra normalmente o banco será populado com Modulos e seus dados.
 
 ```
 
-curl -d '{"module":{"name":"modulo2"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/new-module/
+curl -d '{"module":{"name":"Modulo-FGA-D"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/new-module/
 
 ```
 
@@ -61,7 +61,7 @@ curl -d '{"module":{"name":"modulo2"}}' -H "Content-Type: application/json" -X P
 
 ```
 
-curl -d '{"module":{"name":"Modulo-FGA-D"},"module_data":{"latitude":"12.12","longitude":"12.12","temperature":"12.12","humidity":"12.12","pressure":"12.12","ppm":"123"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/new-module-data/
+curl -d '{"module":{"name":"Modulo-FGA-D"},"module_data":{"latitude":"12.12","longitude":"12.12","temperature":"12.12","humidity":"12.12","velocity":"12.12","ppm":"123"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/new-module-data/
 
 ```
 

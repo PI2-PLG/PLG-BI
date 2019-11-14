@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from modules.models import Module, ModuleData
 from modules.serializers import ModuleDataSerializer
+from decimal import Decimal
 import io
 
 
@@ -14,11 +15,16 @@ class NewModule(APIView):
     Cria um novo modulo
     '''
     def post(self, request):
+
         try:
             module = request.data["module"]
             module_name = module["name"]
-            new_module = Module(name=module_name)
-            new_module.save()
+            new_module, created = Module.objects.get_or_create(name=module_name)
+            if(created):
+                print("[LOG MESSAGE] - New module created: " + module_name)
+            else:
+                print("[LOG MESSAGE] - "+ module_name + " was found")
+
             return Response({'response': 'module_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
             return Response({'response': 'module_unseccessfully_created'}, status=status.HTTP_200_OK)
@@ -34,22 +40,23 @@ class NewModuleData(APIView):
         try:
             module = request.data["module"]
             module_data = request.data["module_data"]
-
             module_name = module["name"]
             module = Module.objects.get(name=module_name)
 
             '''
             A data é coletada automaticamente ao criar um novo conjunto de dados
             '''
+
             data = ModuleData.objects.create(
-                    latitude = module_data["latitude"],
-                    longitude = module_data["longitude"],
-                    temperature = module_data["temperature"],
-                    humidity = module_data["humidity"],
-                    pressure = module_data["pressure"],
+                    latitude = Decimal(module_data["latitude"]),
+                    longitude = Decimal(module_data["longitude"]),
+                    temperature = Decimal(module_data["temperature"]),
+                    humidity = Decimal(module_data["humidity"]),
+                    velocity = Decimal(module_data["velocity"]),
                     ppm = module_data["ppm"],
                     module=module)
             module.module_data.add(data)
+            print("[LOG MESSAGE] - New data saved in " + module_name)
             return Response({'response': 'module-data_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
             return Response({'response': 'module-data_unseccessfully_created'}, status=status.HTTP_200_OK)
@@ -73,7 +80,7 @@ class GetAllModuleData(APIView):
             longitudes = []
             temperatures = []
             humidities = []
-            pressures = []
+            velocity_group = []
             ppms = []
             for data in module_data:
                 module_data = ModuleDataSerializer(data)
@@ -82,7 +89,7 @@ class GetAllModuleData(APIView):
                 longitudes.append(module_data.data['longitude'])
                 temperatures.append(module_data.data['temperature'])
                 humidities.append(module_data.data['humidity'])
-                pressures.append(module_data.data['pressure'])
+                velocity_group.append(module_data.data['velocity'])
                 ppms.append(module_data.data['ppm'])
 
             all_data = {module_name:{
@@ -91,7 +98,7 @@ class GetAllModuleData(APIView):
                                     'longitude':longitudes,
                                     'temperature':temperatures,
                                     'humidity':humidities,
-                                    'pressure':pressures,
+                                    'velocity':velocity_group,
                                     'ppm':ppms
                                     }}
 
@@ -149,7 +156,7 @@ class GetAllData(APIView):
                 longitudes = []
                 temperatures = []
                 humidities = []
-                pressures = []
+                velocity_group = []
                 ppms = []
                 for query in query_list:
                     dates.append(query.date)
@@ -157,7 +164,7 @@ class GetAllData(APIView):
                     longitudes.append(query.longitude)
                     temperatures.append(query.temperature)
                     humidities.append(query.humidity)
-                    pressures.append(query.pressure)
+                    velocity_group.append(query.velocity)
                     ppms.append(query.ppm)
                 data_list[module.name] = {
                                           "date":dates,
@@ -165,7 +172,7 @@ class GetAllData(APIView):
                                           "longitude":longitudes,
                                           "temperature":temperatures,
                                           "humidity":humidities,
-                                          "pressure":pressures,
+                                          "pressure":velocity_group,
                                           "ppm":ppms,
                                          }
             return Response(data_list, status=status.HTTP_200_OK)
