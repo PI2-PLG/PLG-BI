@@ -6,10 +6,13 @@ from django.http import JsonResponse
 from modules.models import Module, ModuleData
 from modules.serializers import ModuleDataSerializer
 from decimal import Decimal
+from rest_framework.permissions import AllowAny
 import io
 
 
 class NewModule(APIView):
+
+    permission_classes = (AllowAny,)
 
     '''
     Cria um novo modulo
@@ -32,6 +35,8 @@ class NewModule(APIView):
 
 
 class NewModuleData(APIView):
+
+    permission_classes = (AllowAny,)
 
     '''
     Cria um conjunto de dados de um determinado módulo
@@ -64,6 +69,8 @@ class NewModuleData(APIView):
 
 
 class GetAllModuleData(APIView):
+
+    permission_classes = (AllowAny,)
 
     '''
     Retorna todos os conjuntos de dados de um determinado módulo
@@ -110,6 +117,8 @@ class GetAllModuleData(APIView):
 
 class GetAllModuleList(APIView):
 
+    permission_classes = (AllowAny,)
+
     '''
     Retorna uma lista com todos os módulos cadastrados
     '''
@@ -140,6 +149,8 @@ class GetAllModuleList(APIView):
 
 
 class GetAllData(APIView):
+
+    permission_classes = (AllowAny,)
 
     '''
     Retorna todos os módulos e seus dados
