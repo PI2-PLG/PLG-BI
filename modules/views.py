@@ -7,6 +7,7 @@ from modules.models import Module, ModuleData
 from modules.serializers import ModuleDataSerializer
 from decimal import Decimal
 from rest_framework.permissions import AllowAny
+from .enum import ModuleStatusSet
 import io
 
 
@@ -33,6 +34,45 @@ class NewModule(APIView):
             return Response({'response': 'module_unseccessfully_created'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
 
+class ModuleStatus(APIView):
+    permission_classes = (AllowAny,)
+
+    '''
+    Retorna o status de um módulo
+    '''
+    def get(self, request):
+        try:
+            module = request.data["module"]
+            module_name = module["name"]
+            query_module = Module.objects.get(name=module_name)
+        except:
+            return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
+
+        response = {}
+        response["module"] = {
+                              "name": query_module.name,
+                              "status": query_module.status,
+                             }
+        return Response(response, status=status.HTTP_200_OK)
+
+    '''
+    Define o status de um módulo
+    '''
+    def post(self, request):
+        try:
+            module = request.data["module"]
+            module_name = module["name"]
+            query_module = Module.objects.get(name=module_name)
+        except:
+            return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
+
+        try:
+            new_status = module["status"]
+            query_module.status = ModuleStatusSet(new_status)
+            query_module.save()
+            return Response({'response': 'status_saved'})
+        except:
+            return Response({'response': 'status_not_saved'}, status=status.HTTP_200_OK)
 
 class NewModuleData(APIView):
 
