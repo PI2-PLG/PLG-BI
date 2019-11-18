@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from .enum import ModuleStatusSet
 
 # Create your models here.
 class Module(models.Model):
@@ -9,6 +10,7 @@ class Module(models.Model):
         db_table = 'module'
 
     name = models.CharField(max_length=100, unique=True)
+    status = models.CharField(max_length=255, choices=[(tag, tag.value) for tag in ModuleStatusSet], default=ModuleStatusSet.UNKNOWN.value)
 
 class ModuleData(models.Model):
 

@@ -7,6 +7,7 @@ from modules.models import Module, ModuleData
 from modules.serializers import ModuleDataSerializer
 from decimal import Decimal
 from rest_framework.permissions import AllowAny
+from .enum import ModuleStatusSet
 import io
 
 
@@ -33,6 +34,45 @@ class NewModule(APIView):
             return Response({'response': 'module_unseccessfully_created'}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_OK)
 
+class ModuleStatus(APIView):
+    permission_classes = (AllowAny,)
+
+    '''
+    Retorna o status de um módulo
+    '''
+    def get(self, request):
+        try:
+            module = request.data["module"]
+            module_name = module["name"]
+            query_module = Module.objects.get(name=module_name)
+        except:
+            return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
+
+        response = {}
+        response["module"] = {
+                              "name": query_module.name,
+                              "status": query_module.status,
+                             }
+        return Response(response, status=status.HTTP_200_OK)
+
+    '''
+    Define o status de um módulo
+    '''
+    def post(self, request):
+        try:
+            module = request.data["module"]
+            module_name = module["name"]
+            query_module = Module.objects.get(name=module_name)
+        except:
+            return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
+
+        try:
+            new_status = module["status"]
+            query_module.status = ModuleStatusSet(new_status)
+            query_module.save()
+            return Response({'response': 'status_saved'})
+        except:
+            return Response({'response': 'status_not_saved'}, status=status.HTTP_200_OK)
 
 class NewModuleData(APIView):
 
@@ -100,6 +140,7 @@ class GetAllModuleData(APIView):
                 ppms.append(module_data.data['ppm'])
 
             all_data = {module_name:{
+                                    'status':module.status,
                                     'date':dates,
                                     'latitude':latitudes,
                                     'longitude':longitudes,
@@ -108,7 +149,6 @@ class GetAllModuleData(APIView):
                                     'velocity':velocity_group,
                                     'ppm':ppms
                                     }}
-
             return Response(all_data, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
@@ -132,12 +172,14 @@ class GetAllModuleList(APIView):
                 if(module.module_data.last() != None and module.module_data.last() != None):
                     module_list['module-'+str(index)] = {
                                                          'name':module.name,
+                                                         'status':module.status,
                                                          'latitude':module.module_data.last().latitude,
                                                          'longitude':module.module_data.last().longitude
                                                          }
                 else:
                     module_list['module-'+str(index)] = {
                                                          'name':module.name,
+                                                         'status':module.status,
                                                          'latitude':0.00,
                                                          'longitude':0.00
                                                          }
@@ -178,12 +220,13 @@ class GetAllData(APIView):
                     velocity_group.append(query.velocity)
                     ppms.append(query.ppm)
                 data_list[module.name] = {
+                                          "status":module.status,
                                           "date":dates,
                                           "latitude":latitudes,
                                           "longitude":longitudes,
                                           "temperature":temperatures,
                                           "humidity":humidities,
-                                          "pressure":velocity_group,
+                                          "velocity":velocity_group,
                                           "ppm":ppms,
                                          }
             return Response(data_list, status=status.HTTP_200_OK)

@@ -53,7 +53,7 @@ for index in range(5):
                       longitude=module_A_datas[index][2],
                       temperature=module_A_datas[index][3],
                       humidity=module_A_datas[index][4],
-                      pressure=module_A_datas[index][5],
+                      velocity=module_A_datas[index][5],
                       ppm=module_A_datas[index][6],
                       module=modules[0]
                      )
@@ -66,7 +66,7 @@ for index in range(5):
                       longitude=module_B_datas[index][2],
                       temperature=module_B_datas[index][3],
                       humidity=module_B_datas[index][4],
-                      pressure=module_B_datas[index][5],
+                      velocity=module_B_datas[index][5],
                       ppm=module_B_datas[index][6],
                       module=modules[1]
                      )
@@ -79,7 +79,7 @@ for index in range(5):
                       longitude=module_C_datas[index][2],
                       temperature=module_C_datas[index][3],
                       humidity=module_C_datas[index][4],
-                      pressure=module_C_datas[index][5],
+                      velocity=module_C_datas[index][5],
                       ppm=module_C_datas[index][6],
                       module=modules[2]
                      )
@@ -92,7 +92,7 @@ for index in range(5):
                       longitude=module_D_datas[index][2],
                       temperature=module_D_datas[index][3],
                       humidity=module_D_datas[index][4],
-                      pressure=module_D_datas[index][5],
+                      velocity=module_D_datas[index][5],
                       ppm=module_D_datas[index][6],
                       module=modules[3]
                      )

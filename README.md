@@ -89,3 +89,18 @@ curl -X GET http://localhost:8003/all-data/
 
 ```
 
+* Exemplo para a coleta do status de um módulo:
+
+```
+
+curl -d '{"module":{"name":"Modulo-FGA-A"}}' -H "Content-Type: application/json" -X GET http://localhost:8003/module-status/
+
+```
+
+* Exemplo para a definição de um novo status em um módulo:
+
+```
+
+curl -d '{"module":{"name":"Modulo-FGA-A","status":"ONLINE"}}' -H "Content-Type: application/json" -X POST http://localhost:8003/module-status/
+
+```
