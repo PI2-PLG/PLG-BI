@@ -100,6 +100,7 @@ class GetAllModuleData(APIView):
                 ppms.append(module_data.data['ppm'])
 
             all_data = {module_name:{
+                                    'status':module.status,
                                     'date':dates,
                                     'latitude':latitudes,
                                     'longitude':longitudes,
@@ -108,7 +109,6 @@ class GetAllModuleData(APIView):
                                     'velocity':velocity_group,
                                     'ppm':ppms
                                     }}
-
             return Response(all_data, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
@@ -132,12 +132,14 @@ class GetAllModuleList(APIView):
                 if(module.module_data.last() != None and module.module_data.last() != None):
                     module_list['module-'+str(index)] = {
                                                          'name':module.name,
+                                                         'status':module.status,
                                                          'latitude':module.module_data.last().latitude,
                                                          'longitude':module.module_data.last().longitude
                                                          }
                 else:
                     module_list['module-'+str(index)] = {
                                                          'name':module.name,
+                                                         'status':module.status,
                                                          'latitude':0.00,
                                                          'longitude':0.00
                                                          }
@@ -178,12 +180,13 @@ class GetAllData(APIView):
                     velocity_group.append(query.velocity)
                     ppms.append(query.ppm)
                 data_list[module.name] = {
+                                          "status":module.status,
                                           "date":dates,
                                           "latitude":latitudes,
                                           "longitude":longitudes,
                                           "temperature":temperatures,
                                           "humidity":humidities,
-                                          "pressure":velocity_group,
+                                          "velocity":velocity_group,
                                           "ppm":ppms,
                                          }
             return Response(data_list, status=status.HTTP_200_OK)
