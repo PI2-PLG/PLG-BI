@@ -8,6 +8,7 @@ from modules.serializers import ModuleDataSerializer
 from decimal import Decimal
 from rest_framework.permissions import AllowAny
 from .enum import ModuleStatusSet
+from .helpers import setModuleStatus
 import io
 
 
@@ -101,6 +102,14 @@ class NewModuleData(APIView):
                     ppm = module_data["ppm"],
                     module=module)
             module.module_data.add(data)
+
+            '''
+            Salvando status
+            '''
+            module.status = setModuleStatus(module.name)
+            print("XABLAAAAAAAAU!")
+            module.save()
+
             print("[LOG MESSAGE] - New data saved in " + module_name)
             return Response({'response': 'module-data_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
