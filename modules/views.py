@@ -68,7 +68,7 @@ class ModuleStatus(APIView):
 
         try:
             new_status = module["status"]
-            query_module.status = ModuleStatusSet(new_status)
+            query_module.status = ModuleStatusSet(new_status).value
             query_module.save()
             return Response({'response': 'status_saved'})
         except:
@@ -139,16 +139,17 @@ class GetAllModuleData(APIView):
                 velocity_group.append(module_data.data['velocity'])
                 ppms.append(module_data.data['ppm'])
 
-            all_data = {module_name:{
-                                    'status':module.status,
-                                    'date':dates,
-                                    'latitude':latitudes,
-                                    'longitude':longitudes,
-                                    'temperature':temperatures,
-                                    'humidity':humidities,
-                                    'velocity':velocity_group,
-                                    'ppm':ppms
-                                    }}
+            print(module.status)
+            all_data = {'name': module.name,
+                        'status':module.status,
+                        'date':dates,
+                        'latitude':latitudes,
+                        'longitude':longitudes,
+                        'temperature':temperatures,
+                        'humidity':humidities,
+                        'velocity':velocity_group,
+                        'ppm':ppms
+                        }
             return Response(all_data, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'module_data_not_found'}, status=status.HTTP_200_OK)
@@ -200,7 +201,7 @@ class GetAllData(APIView):
     def get(self, request):
         try:
             modules = Module.objects.all()
-            data_list = {}
+            data_list = []
             for module in modules:
                 query_list = module.module_data.all()
                 data_set = {}
@@ -219,7 +220,8 @@ class GetAllData(APIView):
                     humidities.append(query.humidity)
                     velocity_group.append(query.velocity)
                     ppms.append(query.ppm)
-                data_list[module.name] = {
+                data_list.append({
+                                          "name":module.name,
                                           "status":module.status,
                                           "date":dates,
                                           "latitude":latitudes,
@@ -228,7 +230,7 @@ class GetAllData(APIView):
                                           "humidity":humidities,
                                           "velocity":velocity_group,
                                           "ppm":ppms,
-                                         }
+                                         })
             return Response(data_list, status=status.HTTP_200_OK)
         except:
             return Response({'response': 'something_are_wrong'}, status=status.HTTP_200_OK)
