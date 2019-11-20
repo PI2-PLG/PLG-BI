@@ -11,25 +11,34 @@ def setModuleStatus(module_name):
 
     status = isOffline(module)
     status = isInMotion(module)
-    return status
 
 def isOffline(module):
     try:
         if(module.module_data.last().latitude == 0.0 and module.module_data.last().longitude == 0.0):
-            print("aqui")
-            return 'OFFLINE'
+            status = 'OFFLINE'
+            setStatus(module, status)
         else:
-            return 'ONLINE'
+            status = 'ONLINE'
+            setStatus(module, status)
     except:
-        return 'UNKNOWN'
+        status = 'UNKNOWN'
+        setStatus(module, status)
 
 def isInMotion(module):
     try:
         if(module.module_data.last().velocity > 1.0):
-            return 'IN_MOTION'
+            status =  'IN_MOTION'
+            setStatus(module, status)
+        elif(module.status == 'OFFLINE'):
+            status =  'OFFLINE'
+            setStatus(module, status)
         else:
-            print("aqui!")
-            print(module.status)
-            return module.status
+            status = 'ONLINE'
+            setStatus(module, status)
     except:
-        return 'UNKNOWN'
+        status = 'UNKNOWN'
+        setStatus(module, status)
+
+def setStatus(module, status):
+    module.status = status
+    module.save()

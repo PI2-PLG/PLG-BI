@@ -106,8 +106,7 @@ class NewModuleData(APIView):
             '''
             Salvando status
             '''
-            module.status = setModuleStatus(module.name)
-            module.save()
+            setModuleStatus(module.name)
 
             print("[LOG MESSAGE] - New data saved in " + module_name)
             return Response({'response': 'module-data_successfully_created'}, status=status.HTTP_201_CREATED)
