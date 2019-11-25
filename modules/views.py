@@ -231,6 +231,7 @@ class GetAllData(APIView):
                     temperatures.append(query.temperature)
                     humidities.append(query.humidity)
                     velocity_group.append(query.velocity)
+                    signal_group.append(query.signal_strength)
                     ppms.append(query.ppm)
                 data_list.append({
                                           "name":module.name,
