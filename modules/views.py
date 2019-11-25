@@ -100,6 +100,7 @@ class NewModuleData(APIView):
                     humidity = Decimal(module_data["humidity"]),
                     velocity = Decimal(module_data["velocity"]),
                     ppm = module_data["ppm"],
+                    signal_strength=module_data["signal_strength"],
                     module=module)
             module.module_data.add(data)
 
@@ -135,6 +136,7 @@ class GetAllModuleData(APIView):
             temperatures = []
             humidities = []
             velocity_group = []
+            signal_group = []
             ppms = []
             for data in module_data:
                 module_data = ModuleDataSerializer(data)
@@ -145,6 +147,7 @@ class GetAllModuleData(APIView):
                 humidities.append(module_data.data['humidity'])
                 velocity_group.append(module_data.data['velocity'])
                 ppms.append(module_data.data['ppm'])
+                signal_group.append(module_data.data['signal_strength'])
 
             print(module.status)
             all_data = {'name': module.name,
@@ -155,7 +158,8 @@ class GetAllModuleData(APIView):
                         'temperature':temperatures,
                         'humidity':humidities,
                         'velocity':velocity_group,
-                        'ppm':ppms
+                        'ppm':ppms,
+                        'signal_strength':signal_group,
                         }
             return Response(all_data, status=status.HTTP_200_OK)
         except:
@@ -219,6 +223,7 @@ class GetAllData(APIView):
                 humidities = []
                 velocity_group = []
                 ppms = []
+                signal_group = []
                 for query in query_list:
                     dates.append(query.date)
                     latitudes.append(query.latitude)
@@ -237,6 +242,7 @@ class GetAllData(APIView):
                                           "humidity":humidities,
                                           "velocity":velocity_group,
                                           "ppm":ppms,
+                                          "signal_strength":signal_group,
                                          })
             return Response(data_list, status=status.HTTP_200_OK)
         except:

@@ -9,7 +9,8 @@ class ModuleDataSerializer(serializers.Serializer):
     humidity = serializers.DecimalField(max_digits=5, decimal_places=2)
     velocity = serializers.DecimalField(max_digits=5, decimal_places=2)
     ppm = serializers.IntegerField()
+    signal_strength = serializers.IntegerField()
 
     class Meta:
         model = ModuleData
-        fields = ['date','latitude','longitude','temperature', 'humidity', 'velocity', 'ppm']
+        fields = ['date','latitude','longitude','temperature', 'humidity', 'velocity', 'ppm', 'signal_strength']
