@@ -25,5 +25,7 @@ class ModuleData(models.Model):
     humidity = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     velocity = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     ppm = models.IntegerField(null=True)
+    # A potência do sinal vai de -113 à -48
+    signal_strength = models.IntegerField(default=-113, null=True)
     module = models.ForeignKey("Module", on_delete=models.CASCADE, related_name='module_data')
 
