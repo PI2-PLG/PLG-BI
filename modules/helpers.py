@@ -9,8 +9,9 @@ def setModuleStatus(module_name):
     except:
         return 'UNKNOWN'
 
-    status = isOffline(module)
-    status = isInMotion(module)
+    isOffline(module)
+    isInMotion(module)
+    angstron(module)
 
 def isOffline(module):
     try:
@@ -52,6 +53,21 @@ def isInMotion(module):
         status = 'UNKNOWN'
         setStatus(module, status)
 
+def isInFireRisk(module):
+    try:
+        pass
+    except:
+        pass
+
+def angstron(module):
+    last_module_data = module.module_data.last()
+    angstronIa = (float(last_module_data.humidity)/20.0) + ((27.0-float(last_module_data.temperature))/10.0)
+    print("\n==ANGSTRON_VALUE===")
+    print(angstronIa)
+    if(angstronIa < 2.5):
+        status = "FIRERISK"
+        setStatus(module, status)
+    print("===================")
 def setStatus(module, status):
     module.status = status
     module.save()
