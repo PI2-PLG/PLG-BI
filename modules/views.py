@@ -115,6 +115,8 @@ class NewModuleData(APIView):
             '''
             Salvando status
             '''
+            setModuleStatus(module.name)
+            
             print("[LOG] - New data saved in " + module_name)
             return Response({'response': 'module-data_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
