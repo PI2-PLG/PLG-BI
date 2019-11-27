@@ -112,12 +112,9 @@ class NewModuleData(APIView):
                     signal_strength=module_data["signal_strength"],
                     module=module)
             module.module_data.add(data)
-
             '''
             Salvando status
             '''
-            setModuleStatus(module.name)
-
             print("[LOG] - New data saved in " + module_name)
             return Response({'response': 'module-data_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
@@ -240,6 +237,7 @@ class GetAllData(APIView):
                     humidities.append(query.humidity)
                     velocity_group.append(query.velocity)
                     ppms.append(query.ppm)
+                    signal_group.append(query.signal_strength)
                 data_list.append({
                                           "name":module.name,
                                           "status":module.status,
