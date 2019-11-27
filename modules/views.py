@@ -26,9 +26,9 @@ class NewModule(APIView):
             module_name = module["name"]
             new_module, created = Module.objects.get_or_create(name=module_name)
             if(created):
-                print("[LOG MESSAGE] - New module created: " + module_name)
+                print("[LOG] - New module created: " + module_name)
             else:
-                print("[LOG MESSAGE] - "+ module_name + " was found")
+                print("[LOG] - "+ module_name + " was found")
 
             return Response({'response': 'module_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
@@ -92,7 +92,16 @@ class NewModuleData(APIView):
             '''
             A data é coletada automaticamente ao criar um novo conjunto de dados
             '''
-
+            print(f"[LOG] Saving data in {module_name}")
+            print("=======================VALUES=======================")
+            print(f"latitude: {module_data['latitude']}")
+            print(f"longitude: {module_data['longitude']}")
+            print(f"temperature: {module_data['temperature']}")
+            print(f"humidity: {module_data['humidity']}")
+            print(f"velocity: {module_data['velocity']}")
+            print(f"ppm: {module_data['ppm']}")
+            print(f"signal_strength: {module_data['signal_strength']}")
+            print("===================================================")
             data = ModuleData.objects.create(
                     latitude = Decimal(module_data["latitude"]),
                     longitude = Decimal(module_data["longitude"]),
@@ -109,7 +118,7 @@ class NewModuleData(APIView):
             '''
             setModuleStatus(module.name)
 
-            print("[LOG MESSAGE] - New data saved in " + module_name)
+            print("[LOG] - New data saved in " + module_name)
             return Response({'response': 'module-data_successfully_created'}, status=status.HTTP_201_CREATED)
         except:
             return Response({'response': 'module-data_unseccessfully_created'}, status=status.HTTP_200_OK)
@@ -149,7 +158,6 @@ class GetAllModuleData(APIView):
                 ppms.append(module_data.data['ppm'])
                 signal_group.append(module_data.data['signal_strength'])
 
-            print(module.status)
             all_data = {'name': module.name,
                         'status':module.status,
                         'date':dates,
