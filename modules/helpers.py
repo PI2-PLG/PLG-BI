@@ -64,7 +64,7 @@ def angstron(module):
     angstronIa = (float(last_module_data.humidity)/20.0) + ((27.0-float(last_module_data.temperature))/10.0)
     print("\n==ANGSTRON_VALUE===")
     print(angstronIa)
-    if(angstronIa < 2.5):
+    if(angstronIa < 2.0 and last_module_data.ppm > 750):
         status = "FIRERISK"
         setStatus(module, status)
     print("===================")
