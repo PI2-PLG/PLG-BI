@@ -67,6 +67,9 @@ def angstron(module):
     if(angstronIa < 2.0 and last_module_data.ppm > 750):
         status = "FIRERISK"
         setStatus(module, status)
+    elif(last_module_data.ppm > 950):
+        status = "FIRERISK"
+        setStatus(module, status)
     print("===================")
 def setStatus(module, status):
     module.status = status
